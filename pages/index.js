@@ -45,14 +45,12 @@ export default function Home() {
   const handleSubmitPostForm = (e) => {
     e.preventDefault();
 
-    // Validate the post title and body
     if (!postTitle || !postBody) {
       setPostError("Please enter both title and body");
       return;
     }
 
-    // Create a new post
-    const newPost = {
+    const newpost = {
       title: postTitle,
       body: postBody,
       userId: selectedUser,
@@ -63,7 +61,7 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newPost),
+      body: JSON.stringify(newpost),
     })
       .then((response) => {
         if (!response.ok) {
@@ -78,14 +76,16 @@ export default function Home() {
         setPostError("");
         console.log("New Post Created:", data);
       })
-      .catch((error) => {
-        setPostError("Failed to create a new post. Please try again later.");
-        console.error("Error creating a new post:", error);
+      .catch((err) => {
+        setPostError(
+          "Failed to create a new post. Please try again later.",
+          err
+        );
       });
   };
 
   return (
-    <div>
+    <div className="container mx-auto">
       <form onSubmit={handleSubmit}>
         <FormControl
           label="Select a User"
@@ -95,13 +95,15 @@ export default function Home() {
           onChange={handleUserChange}
           errorMessage={selectedUserError}
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 mt-4">
+        <button
+          type="submit"
+          className="bg-purple-700 text-white px-4 py-2 mt-4"
+        >
           Submit
         </button>
       </form>
 
-      {/* for displaying the userDAta  */}
-
+      {/* displaying user's data  */}
       <div>{<h1>{selectedUserData.id}</h1>}</div>
       <div>{<h1>{selectedUserData.name}</h1>}</div>
       <div>{<h1>{selectedUserData.username}</h1>}</div>
@@ -113,7 +115,7 @@ export default function Home() {
       <form onSubmit={handleSubmitPostForm}>
         <div className="my-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Post Title
+            Title
           </label>
           <input
             type="text"
@@ -126,7 +128,7 @@ export default function Home() {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Post Body
+            Body
           </label>
           <textarea
             className={`border rounded w-full py-2 px-3 ${
@@ -139,8 +141,8 @@ export default function Home() {
             <p className="text-red-500 text-xs mt-1">{postError}</p>
           )}
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2">
-          Create Post
+        <button type="submit" className="bg-purple-700 text-white px-4 py-2">
+          Post
         </button>
       </form>
     </div>
